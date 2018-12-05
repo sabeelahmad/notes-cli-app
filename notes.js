@@ -65,7 +65,20 @@ var readNote = (title) => {
 
 // Function removes a note corresponding to given title
 var removeNote = (title) => {
-  console.log('Removing note', title);
+  /* This function is broken down into 3 steps */
+  /* Fetching all notes currently stored */
+  var notes = fetchNotes();
+  /* Now we need to remove the note with the provided title
+  to achieve this we use the filter method on the notes array
+  we filter the notes on basis of title and keep only those notes
+  that don't match the title provided, since filter function only
+  stores those values that satisfy the provided condition in the callback */
+  var notesFinal = notes.filter((note) => note.title !== title);
+  /* The final step is to save the notes after removal */
+  saveNotes(notesFinal);
+  /* Returning value to app.js to determine whether a note was removed or not */
+  /* We establish this by checking length before and after removal of the arrays */
+  return (notes.length !== notesFinal.length);
 };
 
 module.exports = {
