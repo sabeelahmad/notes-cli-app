@@ -4,9 +4,46 @@ const yargs = require('yargs');
 
 const notes = require('./notes.js');
 
-// Yargs command line inputs are stored in the yargs.argv
-// Yargs helps to parse command line arguments in an easier way
-const argv = yargs.argv;
+/* Yargs command line inputs are stored in the yargs.argv
+Yargs helps to parse command line arguments in an easier way
+*/
+/* Yargs configuration and chaining of functions */
+/* Help function displays all options and commands for user if he/she uses
+the --help flag while running the app using node */
+/* Command function is where all configuration of a particular command is done
+command(commandName, description, optionsObj) */
+/* DRY code for title and body options for yargs configuration */
+const titleOptions = {
+  describe: 'Title of note.',
+  demand: true,
+  alias: 't'
+};
+const bodyOptions = {
+  describe: 'Body of note.',
+  demand: true,
+  alias: 'b'
+};
+const argv = yargs
+      .command('add', 'Add a new note.', {
+        /* Options for the commands, there are 3 options
+        Alias - short form / flag
+        Demand - Required or Note (False by default)
+        Describe - Description for the particular option
+        This is basically an object of objects where in each property is
+        defined as an object
+        Refer to yargs docs for more. */
+        title: titleOptions,
+        body: bodyOptions
+      })
+      .command('list', 'List all notes.')
+      .command('read', 'Read a note.', {
+        title: titleOptions
+      })
+      .command('remove', 'Remove a note.', {
+        title: titleOptions
+      })
+      .help()
+      .argv;
 var command = argv._[0];
 
 if(command === 'add') {
