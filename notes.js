@@ -1,5 +1,3 @@
-console.log('Starting notes.js');
-
 const fs = require('fs');
 
 // Functions for reusability
@@ -55,12 +53,30 @@ var addNote = (title, body) => {
 
 // Function retrieves all notes
 var getAll = () => {
-  console.log('Getting all notes');
+  /* Fetch all notes and return them to app.js */
+  return fetchNotes();
 };
 
 // Function reads a note of provided title
 var readNote = (title) => {
-  console.log('Reading', title);
+  /* In this function the note is fetched according to
+  the title provided in the cli, and is returned to app.js for logging
+  to console. */
+  /* Fetching notes */
+  var notes = fetchNotes();
+  /* We filter the notes on the basis of title and store those notes
+  that match the title, in our case there will be only one title, since
+  we don't allow duplicate titles in our database of notes */
+  var foundNote = notes.filter((note) => note.title === title);
+  /* Checking if note found and returning its title and body as an object, else
+  JS returns undefined itself by default */
+  if(foundNote.length > 0) {
+    /* Creating return object */
+    return {
+      title: foundNote[0].title,
+      body: foundNote[0].body
+    };
+  }
 };
 
 // Function removes a note corresponding to given title
@@ -81,10 +97,19 @@ var removeNote = (title) => {
   return (notes.length !== notesFinal.length);
 };
 
+/* Function for loggin note data */
+var logNote = (note) => {
+  /* Printing note contents */
+  console.log('-----');
+  console.log(`Title: ${note.title}`);
+  console.log(`Body: ${note.body}`);
+};
+
 module.exports = {
   addNote,
   getAll,
   readNote,
-  removeNote
+  removeNote,
+  logNote
 }
 

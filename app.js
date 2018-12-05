@@ -1,5 +1,3 @@
-console.log('Starting app.js');
-
 const fs = require('fs');
 const _ = require('lodash');
 const yargs = require('yargs');
@@ -10,24 +8,28 @@ const notes = require('./notes.js');
 // Yargs helps to parse command line arguments in an easier way
 const argv = yargs.argv;
 var command = argv._[0];
-console.log('Yargs', argv);
 
 if(command === 'add') {
   var note = notes.addNote(argv.title, argv.body);
   /* Checking for creation of note */
   if(note) {
     console.log('Note created.');
-    /* Printing note contents */
-    console.log('-----');
-    console.log(`Title: ${note.title}`);
-    console.log(`Body: ${note.body}`);
+    notes.logNote(note);
   } else {
     console.log('Note with same title already exists, try again.');
   }
 } else if(command === 'list') {
-  notes.getAll();
+  var allNotes = notes.getAll();
+  /* Logging all notes */
+  allNotes.forEach((note) => notes.logNote(note));
 } else if(command === 'read') {
-  notes.readNote(argv.title);
+  var foundNote = notes.readNote(argv.title);
+  if(foundNote) {
+    console.log('Note found.');
+    notes.logNote(foundNote);
+  } else {
+    console.log('Note not found.');
+  }
 } else if(command === 'remove') {
   var noteRemoved = notes.removeNote(argv.title);
   /* Generating Message */
